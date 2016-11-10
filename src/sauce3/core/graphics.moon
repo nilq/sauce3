@@ -157,7 +157,7 @@ print = (text, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
     batch\setTransformMatrix matrix
     matrix_dirty = false
 
-  font.font\getData!\setScale sx, sy
+  font.font\getData!\setScale sx, -sy
   font.font\draw batch, text, x - ox * sx, y - oy * sy
 
   unless r == 0
@@ -168,7 +168,7 @@ print = (text, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
     batch\setTransformMatrix tmp
     matrix_dirty = false
 
-prin_f = (text, width = 0, align = "left", x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
+print_f = (text, width = 0, align = "left", x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
   check true
 
   tmp = nil
