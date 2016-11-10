@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 -- Defines the shape of characters that can be drawn onto the screen.
 -------------------------------------------------------------------------------
--- @classmod yae.Font
+-- @classmod sauce3.Font
 
 FreeTypeFontGenerator = sauce3.java.require "com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator"
 GlyphLayout = sauce3.java.require "com.badlogic.gdx.graphics.g2d.GlyphLayout"
@@ -12,15 +12,15 @@ class
     file = nil
 
     if filename == nil
-      file = yae.File("sauce3/font.ttf", filetype)
+      file = sauce3.File("sauce3/font.ttf", filetype)
     else
-      file = yae.File(filename, filetype)
+      file = sauce3.File(filename, filetype)
 
-    generator = yae.java.new FreeTypeFontGenerator, file.file
+    generator = sauce3.java.new FreeTypeFontGenerator, file.file
     @font = generator\generateFont size
     @fontTexture = @font\getRegion(0)\getTexture!
     @fontTexture\setFilter Constants.filters["linear"], Constants.filters["linear"]
-    @glyphLayout = yae.java.new GlyphLayout
+    @glyphLayout = sauce3.java.new GlyphLayout
 
   get_ascent: =>
     @font\getAscent!
