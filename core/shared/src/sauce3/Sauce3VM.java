@@ -47,6 +47,10 @@ public class Sauce3VM implements ApplicationListener, InputProcessor, ResourceFi
     public void create () {
         loading = new LoadingScreen();
         loading.setText("Cooking that good sauce!");
+
+        loading.color.r = 1;
+        loading.color.g = 1;
+        loading.color.b = 1;
     }
 
     @Override
