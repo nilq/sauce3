@@ -8,7 +8,7 @@ local engine_path  = debug.getinfo(1, "S").source:match("(.*/)"):sub(2, -5)
 
 local gradlew      = cfg.platforms.windows and "gradlew" or "./gradlew"
 local temp_path    = ".sauce3/"
-local config_path  = "_config.yml"
+local config_path  = "project.yml"
 local needs_clean  = false
 
 local function copy(source, d)
@@ -52,7 +52,7 @@ local function read(f)
 end
 
 local function version()
-  return read(engine_path .. "egg/VERSION")
+  return read(engine_path .. "core/VERSION")
 end
 
 local function check(m, normal)
@@ -76,7 +76,7 @@ local function check(m, normal)
   print(m)
 
   if not exists then
-    copy("egg", temp_path)
+    copy("core", temp_path)
     copy("res", temp_path .. "res")
 
     copy("src/build/classes", temp_path .. "shared/precompiled")
