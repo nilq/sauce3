@@ -7,7 +7,7 @@ import org.yaml.snakeyaml.Yaml;
 import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import yae.YaeVM;
+import sauce3.Sauce3VM;
 
 public class AndroidLauncher extends AndroidApplication {
     @SuppressWarnings("unchecked")
@@ -16,8 +16,8 @@ public class AndroidLauncher extends AndroidApplication {
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
 
         try {
-            Map config = (Map<String, Object>)new Yaml().load(getAssets().open("yae/project.yml"));
-            initialize(new YaeVM(config), cfg);
+            Map config = (Map<String, Object>)new Yaml().load(getAssets().open("sauce3/project.yml"));
+            initialize(new Sauce3VM(config), cfg);
         } catch (IOException e) {
             System.err.println(e.getMessage());
             System.exit(-1);

@@ -1,5 +1,5 @@
 -- Use with for easier usage and prettier code
-with yae
+with sauce3
   .draw = ->
     -- Draw the text on specified coordinates
     .graphics.print "This is #{.project.name}", 10, 10

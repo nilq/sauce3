@@ -10,7 +10,7 @@ import org.robovm.apple.uikit.UIApplication;
 import org.yaml.snakeyaml.Yaml;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-import yae.YaeVM;
+import sauce3.Sauce3VM;
 
 public class IOSLauncher extends IOSApplication.Delegate {
     @SuppressWarnings("unchecked")
@@ -23,7 +23,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
         Map config;
 
         try {
-            config = (Map<String, Object>)yaml.load(new FileInputStream(new File(NSBundle.getMainBundle().getBundlePath(), "yae/project.yml")));
+            config = (Map<String, Object>)yaml.load(new FileInputStream(new File(NSBundle.getMainBundle().getBundlePath(), "sauce3/project.yml")));
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.exit(-1);
@@ -48,7 +48,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
             }
         }
 
-        return new IOSApplication(new YaeVM(config), cfg);
+        return new IOSApplication(new Sauce3VM(config), cfg);
     }
 
     public static void main(String[] args) {

@@ -12,6 +12,6 @@ install:
 jdk: oraclejdk7
 
 script:
-  - yae new "My Game"
-  - yae build desktop
-  - yae build android
+  - sauce3 new "My Game"
+  - sauce3 build desktop
+  - sauce3 build android
