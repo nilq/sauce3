@@ -1,261 +1,74 @@
 package sauce3;
 
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.Lua;
-import org.luaj.vm2.LuaError;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-import org.luaj.vm2.lib.ResourceFinder;
-import org.luaj.vm2.lib.VarArgFunction;
-import org.luaj.vm2.lib.jse.JsePlatform;
-import org.luaj.vm2.lib.jse.CoerceJavaToLua;
+@SuppressWarnings("deprecation")
+public class LoadingScreen implements Disposable {
+    private final SpriteBatch batch;
+    private final BitmapFont font;
+    private final Sprite icon;
 
-public class Sauce3VM implements ApplicationListener, InputProcessor, ResourceFinder {
-  public static final String TAG     = "Sauce3VM";
-  public static final String VERSION = "v0.0.0";
-  public static final Helpers util   = new Helpers();
+    private final GlyphLayout glyphs = new GlyphLayout();
+    private final Color color;
 
-  public static Globals lua;
+    private String text = "";
 
-  private final Callbacks callbacks = new Callbacks(this);
+    public LoadingScreen() {
+        batch = new SpriteBatch();
+        font = new FreeTypeFontGenerator(Gdx.files.internal("sauce3/font.ttf")).generateFont(16);
 
-  private LoadingScreen loading;
-  private Map config;
-  private boolean is_ready;
-  private int state;
+        font.getRegion(0).getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
-  public Sauce3VM(Map config) {
-    this.config = config;
-  }
+        Texture iconTex = new Texture(Gdx.files.internal("sauce3/icon.png"));
 
-  @Override
-  public void create() {
-    loading = new LoadingScreen();
-    loading.set_text("Cooking that good sauce!");
-  }
+        if (!iconTex.getTextureData().isPrepared()) {
+            iconTex.getTextureData().prepare();
+        }
 
-  @Override
-  public void render() {
-    if (is_ready) {
-      callbacks.run();
-      return;
+        color = new Color(iconTex.getTextureData().consumePixmap().getPixel(0, 0));
+        icon = new Sprite(iconTex);
+        icon.setOrigin(0, 0);
     }
 
-    if (initialize()) {
-      if (Gdx.input.isTouched()) {
-        is_ready = true;
+    public void render () {
+        Gdx.gl.glClearColor(color.r, color.g, color.b, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        loading.dispose();
+        batch.begin();
 
-        callbacks.enable();
-        callbacks.load();
-        callbacks.resize(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
+        icon.draw(batch);
+        font.draw(batch, text,
+            (Gdx.graphics.getWidth() - glyphs.width) / 2,
+            (Gdx.graphics.getHeight() - icon.getHeight()) / 2
+        );
 
-        return;
-      }
+        batch.end();
     }
 
-    loading.render();
-  }
-
-  @Override
-  public void resize(int width, int height) {
-    callbacks.resize(width, height);
-
-    if (!is_ready) {
-      loading.resize(width, height);
-    }
-  }
-
-  @Override
-  public void pause() {
-    callbacks.visible(false);
-  }
-
-  @Override
-  public void resume() {
-    callbacks.visible(true);
-  }
-
-  @Override
-  public void dispose() {
-    callbacks.quit();
-
-    if (!is_ready) {
-      loading.dispose();
+    public void resize(int width, int height) {
+        batch.setProjectionMatrix(batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height));
+        icon.setPosition((width - icon.getWidth()) / 2, (height - icon.getHeight()) / 2);
     }
 
-    if (Gdx.app.getType() == ApplicationType.Android) {
-      System.exit(0);
-    }
-  }
-
-  @Override
-  public boolean keyDown(int keycode) {
-    callbacks.keypressed(keycode);
-
-    return false;
-  }
-
-  @Override
-  public boolean keyUp(int keycode) {
-    callbacks.keyreleased(keycode);
-
-    return false;
-  }
-
-  @Override
-  public boolean keyTyped(char character) {
-    callbacks.textinput("" + character);
-
-    return false;
-  }
-
-  @Override
-  public boolean touchDown(int x, int y, int pointer, int buttoncode) {
-    callbacks.touchpressed(x, y, pointer);
-    callbacks.mousepressed(x, y, buttoncode);
-    return false;
-  }
-
-  @Override
-  public boolean touchUp(int x, int y, int pointer, int buttoncode) {
-    callbacks.touchreleased(x, y, pointer);
-    callbacks.mousereleased(x, y, buttoncode);
-
-    return false;
-  }
-
-  @Override
-  public boolean touchDragged(int x, int y, int pointer) {
-    callbacks.touchmoved(x, y, pointer);
-
-    return false;
-  }
-
-  @Override
-  public boolean mouseMoved(int x, int y) {
-    callbacks.mousemoved(x, y);
-
-    return false;
-  }
-
-  @Override
-  public boolean scrolled(int amount) {
-    callbacks.mousescrolled(amount);
-
-    return false;
-  }
-
-  @Override
-  public InputStream findResource(String name) {
-    return Gdx.files.internal(name).read();
-  }
-
-  private LuaTable convertConfig(Map config) {
-    LuaTable table = LuaValue.tableOf();
-
-    for (Object entry : config.entrySet()) {
-      Map.Entry field = (Map.Entry) entry;
-
-      String key = field.getKey().toString();
-      Object value = field.getValue();
-
-      if (field instanceof Map) {
-        value = convertConfig((Map)value);
-      }
-
-      table.set(key, CoerceJavaToLua.coerce(value));
+    public void setText(String text) {
+        this.text = text;
+        glyphs.setText(font, text);
     }
 
-    return table;
-  }
-
-  private boolean initialize() {
-    if (state > 2) {
-      return true;
+    @Override
+    public void dispose() {
+        batch.dispose();
+        font.dispose();
     }
-    switch (state) {
-      case 1:
-
-        lua = JsePlatform.standardGlobals();
-
-        lua.get("package").set("path", "?.lua;?/init.lua");
-        lua.set("sauce3", LuaValue.tableOf());
-        lua.get("sauce3").set("project", convertConfig(config));
-
-        lua.set("print", new VarArgFunction() {
-          @Override public LuaValue invoke(Varargs args) {
-            StringBuffer s = new StringBuffer();
-
-            for (int i = 1; i <= args.narg(); i++) {
-                if (i > 1) {
-                  s.append("\t");
-                }
-
-                s.append(args.arg(i).toString());
-            }
-
-            Gdx.app.log(TAG, s.toString());
-            return LuaValue.NONE;
-          }
-        });
-
-        lua.set("write", new VarArgFunction() {
-          @Override public LuaValue invoke(Varargs args) {
-            StringBuffer s = new StringBuffer();
-
-            for (int i = 1; i <= args.narg(); i++) {
-              if (i > 1) {
-                s.append("\t");
-              }
-
-              s.append(args.arg(i).toString());
-            }
-
-            System.out.print(s.toString());
-
-            return LuaValue.NONE;
-          }
-        });
-
-        lua.set("read", new VarArgFunction() { @Override public LuaValue invoke(Varargs args) {
-          try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            return LuaValue.valueOf(reader.readLine());
-          } catch(IOException e) {
-            return LuaValue.NONE;
-          }
-        }});
-
-        loading.set_text("Cooking that good sauce!");
-        break;
-        case 2:
-          lua.get("require").call("sauce3");
-          Gdx.input.setInputProcessor(this);
-          loading.set_text("Touch screen to proceed");
-          break;
-    }
-
-    state++;
-
-    return false;
-  }
 }
