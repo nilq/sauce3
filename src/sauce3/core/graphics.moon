@@ -24,7 +24,7 @@ matrix = java.new Matrix4
 color  = java.new Color, 1, 1, 1, 1
 
 background = java.new Color 0, 0, 0, 1
-blending   = "alphas"
+blending   = "alpha"
 
 batch\setColor color
 shapes\setColor color

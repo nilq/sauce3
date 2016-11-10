@@ -11,7 +11,7 @@ class
   new: (filename, size=16, filetype) =>
     file = nil
 
-    if filename == nil
+    unless filename
       file = sauce3.File("sauce3/font.ttf", filetype)
     else
       file = sauce3.File(filename, filetype)
