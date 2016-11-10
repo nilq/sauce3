@@ -66,6 +66,12 @@ public class LoadingScreen implements Disposable {
         glyphs.setText(font, text);
     }
 
+    public void setColor(float r, float g, float b) {
+      color.r = r;
+      color.g = g;
+      color.b = b;
+    }
+
     @Override
     public void dispose() {
         batch.dispose();
