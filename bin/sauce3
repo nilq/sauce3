@@ -1,158 +1,180 @@
 #!/usr/bin/env lua
 
-local cfg = require("luarocks.cfg")
-local fs = require("luarocks.fs")
-local workingPath = fs.current_dir().."/"
-local enginePath = debug.getinfo(1,"S").source:match("(.*/)"):sub(2, -5)
-local gradlew = cfg.platforms.windows and "gradlew" or "./gradlew"
-local tempPath = ".sauce3/"
-local configFile = "project.yml"
-local needsClean = false
+local cfg = require "luarocks/cfg"
+local fs  = require "luarocks/fs"
 
-local function copy(source, dest)
-  local src = enginePath..source
-  local dst = workingPath..dest
+local working_path = fs.current_dir() .. "/"
+local engine_path  = debug.getinfo(1, "S").source:match("(.*/)"):sub(2, -5)
+
+local gradlew      = cfg.platforms.windows and "gradlew" or "./gradlew"
+local temp_path    = ".sauce3/"
+local config_path  = "_config.yml"
+local needs_clean  = false
+
+local function copy(source, d)
+  local src = engine_path  .. source
+  local d   = working_path .. d
 
   if fs.is_dir(src) then
-    fs.make_dir(dst)
-    fs.copy_contents(src, dst)
+    fs.make_dir(d)
+    fs.copy_contents(src, d)
   else
-    fs.copy(src, dst)
+    fs.copy(src, d)
   end
 end
 
-local function exec(args, quiet)
-  if (needsClean) then
-    args = "clean "..args
-    needsClean = false
+local function execute(args, quiet)
+  if needs_clean then
+    args        = "clean " .. args
+    needs_clean = false
   end
 
-  fs.change_dir(workingPath..tempPath)
+  fs.change_dir(working_path .. temp_path)
+
   if quiet then
-    fs.execute_quiet(gradlew.." "..args)
+    fs.execute_quiet(gradlew .. " " .. args)
   else
-    fs.execute(gradlew.." "..args)
+    fs.execute(gradlew .. " " .. args)
   end
 end
 
-local function mkex(file)
-  fs.chmod(workingPath..file, "777")
+local function mkex(f)
+  fs.chmod(working_path .. f, "777")
 end
 
-local function read(file)
-  local f = io.open(file, "rb")
-  local content = f:read("*all")
-  f:close()
-  return content
+local function read(f)
+  local file = io.open(f, "rb")
+  local cont = file:read("*all")
+
+  file:close()
+
+  return cont
 end
 
 local function version()
-  return read(enginePath.."core/VERSION")
+  return read(engine_path .. "egg/VERSION")
 end
 
-local function check(msg, normal)
-  if arg[1] ~= "new" and not fs.exists(workingPath..configFile) then
-    print("No project found.")
+local function check(m, normal)
+  local new    = arg[1] == "init"
+  local exists = fs.exists(working_path .. config_path)
+
+  if not new and not exists then
+    print "No project found!"
     os.exit(-1)
   end
 
-  if arg[1] == "new" and fs.exists(workingPath..configFile) then
-    print("Project already exists.")
+  if new and exists then
+    print "Project already exists!"
     os.exit(-1)
   end
 
   if not normal then
-    msg = msg:upper()
+    m = m:upper()
   end
 
-  print(msg)
+  print(m)
 
-  if fs.exists(workingPath..tempPath) then
-    return
+  if not exists then
+    copy("egg", temp_path)
+    copy("res", temp_path .. "res")
+
+    copy("src/build/classes", temp_path .. "shared/precompiled")
+
+    mkex(temp_path .. "gradlew")
+    mkex(temp_path .. "shared/precompile")
+
+    needs_clean = true
   end
-
-  copy("core", tempPath)
-  copy("res", tempPath.."res")
-  copy("src/build/classes", tempPath.."shared/precompiled")
-  mkex(tempPath.."gradlew")
-  mkex(tempPath.."shared/precompile")
-  needsClean = true
 end
 
 local function help()
-  print("Commands:");
-  print("  sauce3 new PROJECT           # initializes new project")
-  print("  sauce3 run PLATFORM          # start your project")
-  print("  sauce3 build BUILD_PLATFORM  # build your project")
-  print("  sauce3 clean                 # clean temporary data for your project")
-  print("  sauce3 update                # update your project's runtime version and dependencies")
-  print("  sauce3 forceupdate           # force update your project's runtime version and dependencies")
-  print("  sauce3 version               # print current compiler version")
-  print("")
-  print("PROJECT can be any string (default 'My Project')")
-  print("PLATFORM can be 'desktop', 'android' or 'ios' (default 'desktop')")
-  print("BUILD_PLATFORM can be 'desktop', 'android' 'ios', 'windows', 'linux', 'mac' (default 'desktop')")
+  print "Sauce3 - The Sauce Engine v0.0.1"
+  print "\nUsage - Commands"
+
+  print "  sauce3 init <project name>"
+  print "  sauce3 run <platform>"
+  print "  sauce3 build <build platform>"
+  print "  sauce3 clean"
+  print "  sauce3 update"
+  print "  sauce3 force-update"
+  print "  sauce3 version"
+  print "  sauce3 help"
+
+  print ""
+
+  print "where ..."
+
+  print "<project name>   is the name of the project, defaults to 'my_project'"
+  print "<platform>       is the platform; 'desktops' or 'android', defaults to 'desktop'"
+  print "<build platform> is the build platform; 'desktop', 'android', 'ios', 'windows', 'linux' or 'mac', defaults to 'desktop'"
+
   os.exit(-1)
 end
 
 if arg[1] == "build" then
-  check("Building your project")
+  check "Building project!"
 
   if #arg < 2 or arg[2] == "desktop" then
-    exec("update updateDesktop desktop:dist")
+    execute "update updateDesktop desktop:dist"
   elseif arg[2] == "android" then
-    exec("update updateAndroid android:dist")
+    execute "update updateAndroid android:dist"
   elseif arg[2] == "ios" then
-    exec("update updateIOS ios:dist")
+    execute "update updateIOS ios:dist"
   elseif arg[2] == "windows" then
-    exec("update updateDesktop desktop:dist desktop:windows")
+    execute "update updateWindows windows:dist"
   elseif arg[2] == "linux" then
-    exec("update updateDesktop desktop:dist desktop:linux")
+    execute "update updateLinux linux:dist"
   elseif arg[2] == "mac" then
-    exec("update updateDesktop desktop:dist desktop:mac")
+    execute "update updateMac mac:dist"
   else
     help()
   end
 elseif arg[1] == "run" then
-  check("Starting your project")
+  check "Running project!"
 
   if #arg < 2 or arg[2] == "desktop" then
-    exec("update updateDesktop desktop:run")
+    execute "update updateDesktop desktop:run"
   elseif arg[2] == "android" then
-    exec("update updateAndroid android:run")
-  elseif arg[2] == "ios" then
-    exec("update updateIOS ios:run")
+    execute "update updateAndroid android:run"
   else
     help()
   end
-elseif arg[1] == "new" then
-  check("Creating new project")
-  local projname = "My Project"
+
+elseif arg[1] == "init" then
+  check "Initializing new project!"
+
+  local name = "my_project"
 
   if #arg > 1 then
-    projname = arg[2]
+    name = arg[2]
   end
 
-  exec("init -PinitName=\""..projname.."\"")
+  execute("init -PinitName=\"" .. name .. "\"")
+
 elseif arg[1] == "clean" then
-  check("Cleaning your project's temporary data")
-  exec("clean")
-elseif arg[1] == "update" then
-  check("Updating your project's runtime")
-  local projversion = read(workingPath..tempPath.."VERSION")
-  local curversion = version()
+  check "Cleaning temporary data!"
+  execute "clean"
 
-  if not curversion == projversion then
-    fs.delete(workingPath..tempPath)
-    check("Updating your project's runtime to "..curversion, true)
+elseif arg[1] == "update" then
+  check "Updating project runtime!"
+
+  local version = read(working_path .. temp_path .. "VERSION")
+
+  if not version() == version then
+    fs.delete(working_path .. temp_path)
+    check("Updating project runtime to " .. version() .. "!", true)
   else
-    print("You are using latest runtime.")
+    print "Project already up-to-date!"
   end
-elseif arg[1] == "forceupdate" then
-  fs.delete(workingPath..tempPath)
-  check("Updating your project's runtime")
+
+elseif arg[1] == "force-update" then
+  fs.delete(working_path .. temp_path)
+  check("Force-updating project runtime!")
+
 elseif arg[1] == "version" then
   print(version())
-else
+
+elseif arg[1] == "help" then
   help()
 end

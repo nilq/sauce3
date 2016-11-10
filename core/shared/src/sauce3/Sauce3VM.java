@@ -46,7 +46,7 @@ public class Sauce3VM implements ApplicationListener, InputProcessor, ResourceFi
     @Override
     public void create () {
         loading = new LoadingScreen();
-        loading.setText("Starting the engine");
+        loading.setText("Cooking that good sauce!");
     }
 
     @Override
@@ -60,8 +60,10 @@ public class Sauce3VM implements ApplicationListener, InputProcessor, ResourceFi
             if (Gdx.input.isTouched()) {
                 ready = true;
                 loading.dispose();
+
                 callbacks.enable();
                 callbacks.load();
+
                 callbacks.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 return;
             }
@@ -200,21 +202,23 @@ public class Sauce3VM implements ApplicationListener, InputProcessor, ResourceFi
                 return LuaValue.NONE;
             }});
 
-            lua.set("read", new VarArgFunction() { @Override public LuaValue invoke(Varargs args) {
+            lua.set("read", new VarArgFunction() {
+              @Override public LuaValue invoke(Varargs args) {
                 try {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                     return LuaValue.valueOf(reader.readLine());
                 } catch(IOException e) {
                     return LuaValue.NONE;
                 }
-            }});
+            }
+          });
 
-            loading.setText("Initializing the game");
-            break;
+          loading.setText("Cooking that good sauce!");
+          break;
         case 2:
             lua.get("require").call("sauce3");
             Gdx.input.setInputProcessor(this);
-            loading.setText("Touch screen to continue");
+            loading.setText("Touch to proceed");
             break;
         }
 
