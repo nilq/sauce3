@@ -3,9 +3,9 @@
 -------------------------------------------------------------------------------
 -- @classmod yae.Font
 
-FreeTypeFontGenerator = yae.java.require "com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator"
-GlyphLayout = yae.java.require "com.badlogic.gdx.graphics.g2d.GlyphLayout"
-Constants = require "sauce.wrappers"
+FreeTypeFontGenerator = sauce3.java.require "com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator"
+GlyphLayout = sauce3.java.require "com.badlogic.gdx.graphics.g2d.GlyphLayout"
+Constants = require "sauce3.wrappers"
 
 class
   new: (filename, size=16, filetype) =>
