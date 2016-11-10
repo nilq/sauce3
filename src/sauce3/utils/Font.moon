@@ -1,25 +1,26 @@
-FreeTypeFontGenerator = sauce3.java.require "com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator"
-GlyphLayout           = sauce3.java.require "com.badlogic.gdx.graphics.g2d.GlyphLayout"
+-------------------------------------------------------------------------------
+-- Defines the shape of characters that can be drawn onto the screen.
+-------------------------------------------------------------------------------
+-- @classmod yae.Font
 
-Constants = require "sauce3.wrappers"
+FreeTypeFontGenerator = yae.java.require "com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator"
+GlyphLayout = yae.java.require "com.badlogic.gdx.graphics.g2d.GlyphLayout"
+Constants = require "sauce.wrappers"
 
 class
-  new: (path, size = 16, f_type) =>
-    local file
+  new: (filename, size=16, filetype) =>
+    file = nil
 
-    unless path
-      file = sauce3.File "sauce3/font.tff", f_type
+    if filename == nil
+      file = yae.File("sauce3/font.ttf", filetype)
     else
-      file = sauce3.File path, f_type
+      file = yae.File(filename, filetype)
 
-    generator = sauce3.java.new FreeTypeFontGenerator, file.file
-
+    generator = yae.java.new FreeTypeFontGenerator, file.file
     @font = generator\generateFont size
-
-    @font_texture = (@font\getRegion 0)\getTexture!
-    @font_texture\setFilter Constants.filters["linear"], Constants.filters["linear"]
-
-    @glyph_layout = sauce3.java.new GlyphLayout
+    @fontTexture = @font\getRegion(0)\getTexture!
+    @fontTexture\setFilter Constants.filters["linear"], Constants.filters["linear"]
+    @glyphLayout = yae.java.new GlyphLayout
 
   get_ascent: =>
     @font\getAscent!
@@ -31,36 +32,36 @@ class
     @font\getLineHeight!
 
   get_bounds: (text) =>
-    @glyph_layout\setText text
-    @glyph_layout.width, @glyph_layout.height
+    @glyphLayout\setText text
+    @glyphLayout.width, @glyphLayout.height
 
   get_filter: =>
-    min_filter = @font_texture\getMinFilter!
-    mag_filter = @font_texture\getMagFilter!
-
-    Constants.filters[min_filter], Constants.filters[mag_filter]
-
-  get_width: (text) =>
-    w, _ = @get_bounds text
-    w
+    min_filter = @fontTexture\getMinFilter!
+    mag_filter = @fontTexture\getMagFilter!
+    Constants.filtercodes[min_filter], Constants.filtercodes[mag_filter]
 
   get_height: (text) =>
-    _, h = @get_bounds text
+    _, h = @getBounds text
     h
 
+  get_width: (text) =>
+    w, _ = @getBounds text
+    w
+
   has_glyphs: (...) =>
-    args  = table.pack ...
+    args = table.pack ...
     found = true
 
     for i = 1, args.n
       found = found and @font\containsCharacter args[i]
+
     found
 
   set_filter: (min, mag) =>
-    @font_texture\setFilter Constants.filters[min], Constants.filters[mag]
+    @fontTexture\setFilter Constants.filters[min], Constants.filters[mag]
 
   set_line_height: (height) =>
-    @font\getData!\setLineHeight height
+    @font\getData()\setLineHeight height
 
-  dispose: =>
+  free: =>
     @font\dispose!
