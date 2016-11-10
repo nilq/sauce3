@@ -1,4 +1,4 @@
-TextureFilter = smaug.java.require "com.badlogic.gdx.graphics.Texture$TextureFilter"
+TextureFilter = sauce3.java.require "com.badlogic.gdx.graphics.Texture$TextureFilter"
 
 {
   "linear": TextureFilter.Linear

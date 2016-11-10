@@ -1,11 +1,11 @@
-import java, Font, Image, Quad from smaug
+import java, Font, Image, Quad from sauce3
 
-Constants = require "smaug/wrappers"
+Constants = require "sauce3/wrappers"
 Color     = java.require "com.badlogic.gdx.graphics.Color"
 Gdx       = java.require "com.badlogic.gdx.Gdx"
 GL20      = java.require "com.badlogic.gdx.graphics.GL20"
 Matrix4   = java.require "com.badlogic.gdx.math.Matrix4"
-SmaugVM   = java.require "smaug.SmaugVM"
+Sauce3VM   = java.require "sauce3.Sauce3VM"
 
 OrthographicCamera = java.require "com.badlogic.gdx.graphics.OrthographicCamera"
 ShapeRender        = java.require "com.badlogic.gdx.graphics.glutils.ShapeRenderer"
@@ -45,7 +45,7 @@ check = (texture_based) ->
       matrix_dirty = false
 
     if shapes\isDrawing!
-      SmaugVM.util\endShapes shapes
+      Sauce3VM.util\endShapes shapes
     unless batch\isDrawing!
       batch\begin!
   else
@@ -54,7 +54,7 @@ check = (texture_based) ->
       matrix_dirty = false
 
     if batch\isDrawing!
-      SmaugVM.util\endBatch batch
+      Sauce3VM.util\endBatch batch
     unless shapes\isDrawing!
       shapes\begin!
 
@@ -139,9 +139,9 @@ polygon = (mode, ...) ->
 
 present = ->
   if shapes\isDrawing!
-    SmaugVM.util\endShapes shapes
+    Sauce3VM.util\endShapes shapes
   if batch\isDrawing!
-    SmaugVM.util\endBatch batch
+    Sauce3VM.util\endBatch batch
 
 print = (text, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
   check true

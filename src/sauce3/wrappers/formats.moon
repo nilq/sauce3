@@ -1,4 +1,4 @@
-Format = smaug.java.require "com.badlogic.gdx.graphics.Pixmap$Format"
+Format = sauce3.java.require "com.badlogic.gdx.graphics.Pixmap$Format"
 
 {
   "rgba8": Format.RGBA8888

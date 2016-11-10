@@ -1,4 +1,4 @@
-import java from smaug
+import java from sauce3
 
 TimeUtils = java.require "com.badlogic.gdx.utils.TimeUtils"
 Gdx       = java.require "com.badlogic.gdx.Gdx"

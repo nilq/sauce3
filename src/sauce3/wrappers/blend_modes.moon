@@ -1,4 +1,4 @@
-GL20 = smaug.java.require "com.badlogic.gdx.graphics.GL20"
+GL20 = sauce3.java.require "com.badlogic.gdx.graphics.GL20"
 
 {
   "alpha": {

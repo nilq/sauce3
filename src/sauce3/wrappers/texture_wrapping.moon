@@ -1,4 +1,4 @@
-TextureWrap = smaug.java.require "com.badlogic.gdx.graphics.Texture$TextureWrap"
+TextureWrap = sauce3.java.require "com.badlogic.gdx.graphics.Texture$TextureWrap"
 
 {
   "mirrored_repeat": TextureWrap.MirroredRepeat

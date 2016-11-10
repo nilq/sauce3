@@ -1,25 +1,25 @@
-FreeTypeFontGenerator = smaug.java.require "com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator"
-GlyphLayout           = smaug.java.require "com.badlogic.gdx.graphics.g2d.GlyphLayout"
+FreeTypeFontGenerator = sauce3.java.require "com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator"
+GlyphLayout           = sauce3.java.require "com.badlogic.gdx.graphics.g2d.GlyphLayout"
 
-Constants = require "smaug.wrappers"
+Constants = require "sauce3.wrappers"
 
 class
   new: (path, size = 16, f_type) =>
     local file
 
     unless path
-      file = smaug.File "../res/font.tff", f_type or "local"
+      file = sauce3.File "../res/font.tff", f_type or "local"
     else
-      file = smaug.File path, f_type
+      file = sauce3.File path, f_type
 
-    generator = smaug.java.new FreeTypeFontGenerator, file.file
+    generator = sauce3.java.new FreeTypeFontGenerator, file.file
 
     @font = generator\generateFont size
 
     @font_texture = (@font\getRegion 0)\getTexture!
     @font_texture\setFilter Constants.filters["linear"], Constants.filters["linear"]
 
-    @glyph_layout = smaug.java.new GlyphLayout
+    @glyph_layout = sauce3.java.new GlyphLayout
 
   get_ascent: =>
     @font\getAscent!

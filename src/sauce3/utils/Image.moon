@@ -1,11 +1,11 @@
-Texture   = smaug.java.require "com.badlogic.gdx.graphics.Texture"
-Constants = require "smaug.wrappers"
+Texture   = sauce3.java.require "com.badlogic.gdx.graphics.Texture"
+Constants = require "sauce3.wrappers"
 
 class
   new: (path, format = "rgba8", f_type) =>
-    file = smaug.File path, f_type
+    file = sauce3.File path, f_type
 
-    @texture = smaug.java.new Texture, file.file, Constants.formats[format], false
+    @texture = sauce3.java.new Texture, file.file, Constants.formats[format], false
     @texture\setFilter Constants.filters["linear"], Constants.filters["linear"]
 
   get_dimensions: =>

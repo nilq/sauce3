@@ -1,4 +1,4 @@
-Align = smaug.java.require "com.badlogic.gdx.utils.Align"
+Align = sauce3.java.require "com.badlogic.gdx.utils.Align"
 
 {
   "center": Align.center

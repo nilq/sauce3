@@ -1,4 +1,4 @@
-path = "smaug/wrappers/"
+path = "sauce3/wrappers/"
 
 aligns      = require path .. "aligns"
 blend_modes = require path .. "blend_modes"

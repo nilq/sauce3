@@ -1,7 +1,7 @@
-import java from smaug
+import java from sauce3
 
 Gdx     = java.require "com.badlogic.gdx.Gdx"
-SmaugVM = java.require "smaug.SmaugVM"
+Sauce3VM = java.require "sauce3.Sauce3VM"
 
 get_clipboard = ->
   Gdx.app\getClipboard!\getContents!
@@ -10,7 +10,7 @@ set_clipboard = (v) ->
   Gdx.app\getClipboard!\setContents v
 
 get_os = ->
-  SmaugVM.util\get_OS!
+  Sauce3VM.util\get_OS!
 
 get_memory = ->
   Gdx.app\getJavaHeap!

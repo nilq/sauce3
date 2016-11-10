@@ -1,5 +1,5 @@
-Gdx     = smaug.java.require "com.badlogic.gdx.Gdx"
-SmaugVM = smaug.java.require "smaug.SmaugVM"
+Gdx     = sauce3.java.require "com.badlogic.gdx.Gdx"
+Sauce3VM = sauce3.java.require "sauce3.Sauce3VM"
 
 class
   new: (f, t = "internal") =>
@@ -7,7 +7,7 @@ class
       when "internal"
         @file = Gdx.files\internal f
       when "local"
-        @file = SmaugVM.util\local_file f
+        @file = Sauce3VM.util\local_file f
       when "external"
         @file = Gdx.files\external f
       when "classpath"
