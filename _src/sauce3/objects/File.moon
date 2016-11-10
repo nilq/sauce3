@@ -1,8 +1,3 @@
--------------------------------------------------------------------------------
--- Represents a file on the filesystem.
--------------------------------------------------------------------------------
--- @classmod sauce3.File
-
 Gdx = sauce3.java.require "com.badlogic.gdx.Gdx"
 Sauce3VM = sauce3.java.require "sauce3.Sauce3VM"
 
@@ -20,21 +15,9 @@ class
       when "absolute"
         @file = Gdx.files\absolute
 
-  ---
-  -- Append data to an existing file.
-  -- @tparam File self
-  -- @string text The string data to append to the file.
-  -- @usage
-  -- File\append text
   append: (text) =>
     @file\writeString text, true
 
-  ---
-  -- Copy file.
-  -- @tparam File self
-  -- @tparam File to The destination file.
-  -- @usage
-  -- File\copy to
   copy: (to) =>
     @file\copyTo to
 
@@ -44,7 +27,7 @@ class
   exists: =>
     @file\exists!
 
-  getDirectoryItems: =>
+  get_directory_items: =>
     children = @file\list!
     paths = {}
 
@@ -53,16 +36,16 @@ class
 
     paths
 
-  getLastModified: =>
+  get_last_modified: =>
     @file\lastModified!
 
-  getSize: =>
+  get_size: =>
     @file\length!
 
-  isDirectory: =>
+  is_directory: =>
     @file\isDirectory!
 
-  isFile: =>
+  is_file: =>
     not @is_directory!
 
   move: (to_file) =>
