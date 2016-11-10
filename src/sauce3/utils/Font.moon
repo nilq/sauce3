@@ -8,7 +8,7 @@ class
     local file
 
     unless path
-      file = sauce3.File "../res/font.tff", f_type or "local"
+      file = sauce3.File "sauce3/font.tff", f_type
     else
       file = sauce3.File path, f_type
 
