@@ -7,7 +7,7 @@ class
       when "internal"
         @file = Gdx.files\internal f
       when "local"
-        @file = Sauce3VM.util\local_file f
+        @file = Sauce3VM.util\localFile f
       when "external"
         @file = Gdx.files\external f
       when "classpath"
