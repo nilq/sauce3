@@ -25,16 +25,16 @@ sauce3.audio       = require "sauce3/core/audio"
 
 import key_codes, button_codes from require "sauce3/wrappers"
 
-sauce3._keypressed = (key) ->
+sauce3._key_pressed = (key) ->
   (sauce3.key_pressed key_codes[key]) if sauce3.key_pressed
 
-sauce3._keyreleased = (key) ->
+sauce3._key_released = (key) ->
   (sauce3.key_released key_codes[key]) if sauce3.key_released
 
-sauce3._mousepressed = (x, y, button) ->
+sauce3._mouse_pressed = (x, y, button) ->
   (sauce3.mouse_pressed button_codes[button]) if sauce3.mouse_pressed
 
-sauce3._mousereleased = (x, y, button) ->
+sauce3._mouse_released = (x, y, button) ->
   (sauce3.mouse_released button_codes[button]) if sauce3.mouse_released
 
 sauce3._quit = ->

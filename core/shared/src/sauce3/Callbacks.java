@@ -44,39 +44,39 @@ public class Callbacks {
   }
 
   public void keyreleased(int keycode) {
-    run_callback("_keyreleased", keycode);
+    run_callback("_key_released", keycode);
   }
 
   public void textinput(String character) {
-    run_callback("textinput", character);
+    run_callback("text_input", character);
   }
 
   public void touchpressed(int x, int y, int pointer) {
-    run_callback("touchpressed", x, y, pointer);
+    run_callback("touch_pressed", x, y, pointer);
   }
 
   public void mousepressed(int x, int y, int buttoncode) {
-    run_callback("_mousepressed", x, y, buttoncode);
+    run_callback("_mouse_pressed", x, y, buttoncode);
   }
 
   public void touchreleased(int x, int y, int pointer) {
-    run_callback("touchreleased", x, y, pointer);
+    run_callback("touch_released", x, y, pointer);
   }
 
   public void mousereleased(int x, int y, int buttoncode) {
-    run_callback("_mousereleased", x, y, buttoncode);
+    run_callback("_mouse_released", x, y, buttoncode);
   }
 
   public void touchmoved(int x, int y, int pointer) {
-    run_callback("touchmoved", x, y, pointer);
+    run_callback("touch_moved", x, y, pointer);
   }
 
   public void mousemoved(int x, int y) {
-    run_callback("mousemoved", x, y);
+    run_callback("mouse_moved", x, y);
   }
 
   public void mousescrolled(int amount) {
-    run_callback("mousescrolled", amount);
+    run_callback("mouse_scrolled", amount);
   }
 
   private void run_callback(String key, Object... args) {
