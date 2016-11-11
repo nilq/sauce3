@@ -40,7 +40,7 @@ public class Callbacks {
   }
 
   public void keypressed(int keycode) {
-    run_callback("_keypressed", keycode);
+    run_callback("_key_pressed", keycode);
   }
 
   public void keyreleased(int keycode) {
