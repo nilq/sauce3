@@ -21,6 +21,7 @@ sauce3.graphics    = require "sauce3/core/graphics"
 sauce3.console     = require "sauce3/core/console"
 sauce3.system      = require "sauce3/core/system"
 sauce3.timer       = require "sauce3/core/timer"
+sauce3.audio       = require "sauce3/core/audio"
 
 Constants = require "sauce3/wrappers"
 import key_codes, button_codes from Constants
