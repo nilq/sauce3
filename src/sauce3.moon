@@ -27,10 +27,10 @@ Constants = require "sauce3/wrappers"
 import key_codes, button_codes from Constants
 
 sauce3._keypressed = (key) ->
-  (sauce3.key_pressed key_codes[key]) if sauce3.keypressed
+  (sauce3.key_pressed key_codes[key]) if sauce3.key_pressed
 
 sauce3._keyreleased = (key) ->
-  (sauce3.key_released key_codes[key]) if sauce3.keyreleased
+  (sauce3.key_released key_codes[key]) if sauce3.key_released
 
 sauce3._mousepressed = (x, y, button) ->
   (sauce3.mouse_pressed button_codes[button]) if sauce3.mouse_pressed
