@@ -20,11 +20,11 @@ public class Callbacks {
     }
 
     public void load() {
-        runCallback("load");
+        run_callback("load");
     }
 
     public void run() {
-        runCallback("run");
+        run_callback("run");
     }
 
     public void resize(int width, int height) {
