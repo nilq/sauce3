@@ -1,4 +1,4 @@
-import tiny from require "sauce3/framework/libs/tiny"
+tiny = require "sauce3/framework/libs/tiny"
 
 require_all = (...) ->
   tiny.requireAll ...
