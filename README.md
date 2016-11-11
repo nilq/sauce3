@@ -1,32 +1,57 @@
-# Yet Another Engine
+# Sauce3 - GDK
 
-<img src="https://sauce3.io/img/logo.gif"
- alt="Moon" title="Moon" align="left" hspace="10" width="130px"/>
+> Oh no, oh no; that's the beauty of Sauce3, it's so intense it skips over the other two!
 
-> **Kaizo**: Oh! Even someone with a tender face like yours has a great weapon like that! It doesn't fit someone like you!  
-> **Sauce3**: Eh? This bazooka?  
-> **Kaizo**: Yeah! If I had that weapon, I could have the power of a million people! Well, give it to me! Give it to me!
+Sauce3 is a game development kit for cooking 1- and 2-dimensional games in MoonScript/Lua through LibGDX.
+Currently supporting **Linux**, **Windows**, **OS X**, **Android**, **iOS**, **Ouya** as well as everything else supporting Java/LibGDX.
 
-<br clear="both"/>
-An engine you can use to make games in **MoonScript**. It's free, open-source, and works on **Windows**, **Mac OS X**, **Linux**, **Android**, **iOS** and **Ouya**.
+### Example
+
+**MoonScript**
+```moon
+with sauce3
+  .draw = ->
+    .graphics.print "This is #{.project.name}", 10, 10
+
+  .key_pressed = (key) ->
+    if key == "q" or key == "escape"
+      .system.quit!
+```
+
+```moon
+sauce3.draw = ->
+  sauce3.graphics.print "This is #{sauce3.project.name}", 10, 10
+
+sauce3.key_pressed = (key) ->
+  if key == "q" or key == "escape"
+    sauce3.system.quit!
+```
+
+**Lua**
+```
+function sauce3.draw()
+  sauce3.graphics.print("This is " .. sauce3.project.name, 10, 10)
+end
+
+function sauce3.key_pressed(key)
+  if key == "q" or key == "escape" then
+    sauce3.system.quit()
+  end
+end
+```
+
+### Styling commandments
+
+- It is in fact a sin to use anything but **snake_case** for Moon/Lua function- and variable names!
+- It is in fact a sin to use anything but **CamelCase** for Moon/Lua class names!
 
 ### Installation
 
+```bash
+$ alias fucking="sudo"
+$ fucking luarocks install --server=http://luarocks.org/dev sauce3
 ```
-luarocks install --server=http://luarocks.org/dev sauce3
-```
-
-### Getting Started
-
-  * [Introduction](https://github.com/sauce3dev/sauce3/wiki/Introduction)
-  * [Create your first project](https://github.com/sauce3dev/sauce3/wiki/Getting-started)
-  * [Run, Manage and Package your project]( https://github.com/sauce3dev/sauce3/wiki/Running-and-packaging-your-project)
-  * [Read the Wiki](https://github.com/sauce3dev/sauce3/wiki)
-
-### Documentation
-
-The [Wiki](https://github.com/sauce3dev/sauce3/wiki) contains all the information you'll need to write game. You can contribute to the Wiki directly here on GitHub! Also, you can view [online documentation](https://sauce3.io/doc/) generated right from the source code.
 
 ### Reporting Issues
 
-Use the [issue tracker](https://github.com/sauce3dev/sauce3/issues) here on GitHub to report issues.
+Use the [issue tracker](https://github.com/nilq/sauce3/issues) here on GitHub to report issues.
