@@ -1,4 +1,4 @@
-tiny = require "sauce3/framework/tiny"
+tiny = require "sauce3.framework.lib.tiny"
 
 require_all = (...) ->
   tiny.requireAll ...
