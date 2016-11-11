@@ -18,6 +18,8 @@ with sauce3
       .system.quit!
 ```
 
+or ...
+
 ```moon
 sauce3.draw = ->
   sauce3.graphics.print "This is #{sauce3.project.name}", 10, 10
@@ -28,7 +30,7 @@ sauce3.key_pressed = (key) ->
 ```
 
 **Lua**
-```
+```lua
 function sauce3.draw()
   sauce3.graphics.print("This is " .. sauce3.project.name, 10, 10)
 end
