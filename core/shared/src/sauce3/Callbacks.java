@@ -80,9 +80,7 @@ public class Callbacks {
   }
 
   private void run_callback(String key, Object... args) {
-    if (!is_enabled) {
-      return;
-    } else if (vm.lua == null) {
+    if (!enabled || vm.lua == null) {
       return;
     }
 
