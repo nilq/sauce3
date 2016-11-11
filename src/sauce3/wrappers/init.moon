@@ -10,7 +10,7 @@ shapes      = require path .. "shapes"
 wraps       = require path .. "texture_wrapping"
 
 key_codes = {}
-for k, v in pairs key_codes
+for k, v in pairs keys
   key_codes[v] = k
 
 button_codes = {}

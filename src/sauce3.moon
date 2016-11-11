@@ -23,8 +23,7 @@ sauce3.system      = require "sauce3/core/system"
 sauce3.timer       = require "sauce3/core/timer"
 sauce3.audio       = require "sauce3/core/audio"
 
-Constants = require "sauce3/wrappers"
-import key_codes, button_codes from Constants
+import key_codes, button_codes from require "sauce3/wrappers"
 
 sauce3._keypressed = (key) ->
   (sauce3.key_pressed key_codes[key]) if sauce3.key_pressed
