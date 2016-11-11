@@ -89,26 +89,7 @@ local function check(m, normal)
 end
 
 local function help()
-  print "Sauce3 - The Sauce Engine v0.0.1"
-  print "\nUsage - Commands"
-
-  print "  sauce3 init <project name>"
-  print "  sauce3 run <platform>"
-  print "  sauce3 build <build platform>"
-  print "  sauce3 clean"
-  print "  sauce3 update"
-  print "  sauce3 force-update"
-  print "  sauce3 version"
-  print "  sauce3 help"
-
-  print ""
-
-  print "where ..."
-
-  print "<project name>   is the name of the project, defaults to 'my_project'"
-  print "<platform>       is the platform; 'desktops' or 'android', defaults to 'desktop'"
-  print "<build platform> is the build platform; 'desktop', 'android', 'ios', 'windows', 'linux' or 'mac', defaults to 'desktop'"
-
+  print("\nSauce3 - The Game Development Kit\n\nUsage - Commands\n  sauce3 init <project name>          # create new project with given name - defaults to \"my_project\"\n  sauce3 run <platform>               # run project as on given platform - defaults to 'desktop'\n  sauce3 build <build platform>       # build project to given platform - defaults to 'desktop'\n  sauce3 clean                        # clean temporary directory\n  sauce3 update                       # update temporary directory\n  sauce3 force-update                 # forcefully update temporary directory\n  sauce3 version                      # get version ... for some reason?\n  sauce3 help                         # show this message\n\nwhere ...\n<project name>   is the name of the project, defaults to 'my_project'\n<platform>       is the platform; 'desktops' or 'android', defaults to 'desktop'\n<build platform> is the build platform; 'desktop', 'android', 'ios', 'windows', 'linux' or 'mac', defaults to 'desktop'\n")
   os.exit(-1)
 end
 
@@ -176,5 +157,7 @@ elseif arg[1] == "version" then
   print(version())
 
 elseif arg[1] == "help" then
+  help()
+else
   help()
 end
