@@ -169,6 +169,18 @@ ecs.sorted_processing_system = (t = {}) ->
 ----------------------------------
 world_meta = {}
 
+ecs.add = (world, ...) ->
+  for i = 1, select "#", ...
+    obj = select i, ...
+    if obj
+      if is_system obj
+        ecs_add_system world, obj
+      else
+        ecs_add_entity world, obj
+  ...
+
+ecs_add = ecs.add
+
 ecs.world = (...) ->
   ret = setmetatable {
     entities_to_remove: {}
@@ -205,18 +217,6 @@ ecs.add_system = (world, system) ->
   system
 
 ecs_add_system = ecs.add_system
-
-ecs.add = (world, ...) ->
-  for i = 1, select "#", ...
-    obj = select i, ...
-    if obj
-      if is_system obj
-        ecs_add_system world, obj
-      else
-        ecs_add_entity world, obj
-  ...
-
-ecs_add = ecs.add
 
 ecs.remove_entity = (world, entity) ->
   e2r = world.entities_to_remove
