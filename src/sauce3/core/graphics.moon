@@ -246,6 +246,9 @@ set_blend_mode = (mode) ->
   blend_mode = Constants[blending]
   batch\setBlendFunction blend_mode[1], blend_mode[2]
 
+set_color = (r, g, b, a = 255) ->
+  color\set r / 255, g / 255, b / 255, a / 255
+
 set_font = (v) ->
   font = v
 
