@@ -249,6 +249,10 @@ set_blend_mode = (mode) ->
 set_color = (r, g, b, a = 255) ->
   color\set r / 255, g / 255, b / 255, a / 255
 
+  batch\setColor color
+  shapes\setColor color
+  font.font\setColor color
+
 set_font = (v) ->
   font = v
 
