@@ -45,7 +45,7 @@ easing.add = (name, f) =>
 
   generate_ease name, f
 
-for k, v in pairs default
+for k, v in pairs defaults
   generate_ease k, v
 
 setmetatable easy, {
