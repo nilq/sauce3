@@ -94,8 +94,8 @@ draw = (image, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
 draw_q = (image, quad, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
   check true
 
-  w = quad.width
-  h = quad.height
+  w = quad.w
+  h = quad.h
 
   src_x = quad.x
   src_y = quad.y
