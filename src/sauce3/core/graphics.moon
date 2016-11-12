@@ -203,7 +203,7 @@ reset = ->
   shader = SpriteBatch\createDefaultShader!
   batch\setShader shader
 
-  background\set 0.4, 0.3, 0.4, 1
+  background\set 0, 0, 0, 1
   color\set 1, 1, 1, 1
 
   batch\setColor color
