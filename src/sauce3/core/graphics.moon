@@ -10,117 +10,134 @@ Sauce3VM   = java.require "sauce3.Sauce3VM"
 OrthographicCamera = java.require "com.badlogic.gdx.graphics.OrthographicCamera"
 ShapeRender        = java.require "com.badlogic.gdx.graphics.glutils.ShapeRenderer"
 SpriteBatch        = java.require "com.badlogic.gdx.graphics.g2d.SpriteBatch"
-
 shader = SpriteBatch\createDefaultShader!
-
-batch  = java.new SpriteBatch, 1000, shader
+batch = java.new SpriteBatch, 1000, shader
 shapes = java.new ShapeRender
-
 font = Font!
-
 shapes\setAutoShapeType true
-
 matrix = java.new Matrix4
-color  = java.new Color, 1, 1, 1, 1
-
+color = java.new Color, 1, 1, 1, 1
 background = java.new Color, 0, 0, 0, 1
-blending   = "alpha"
-
+blending = "alpha"
 batch\setColor color
 shapes\setColor color
 font.font\setColor color
-
 camera = java.new OrthographicCamera
 camera\setToOrtho true
-
 batch\setProjectionMatrix camera.combined
 shapes\setProjectionMatrix camera.combined
+matrixDirty = false
 
-matrix_dirty = false
-
-check = (texture_based) ->
-  if texture_based
-    if matrix_dirty
+check = (textureBased) ->
+  if textureBased
+    if matrixDirty
       batch\setTransformMatrix matrix
-      matrix_dirty = false
+      matrixDirty = false
 
-    if shapes\isDrawing!
-      Sauce3VM.util\endShapes shapes
-    unless batch\isDrawing!
-      batch\begin!
+    if shapes\isDrawing! then YaeVM.util\endShapes shapes
+    if not batch\isDrawing! then batch\begin!
   else
-    if matrix_dirty
+    if matrixDirty
       shapes\setTransformMatrix matrix
-      matrix_dirty = false
+      matrixDirty = false
 
-    if batch\isDrawing!
-      Sauce3VM.util\endBatch batch
-    unless shapes\isDrawing!
-      shapes\begin!
+    if batch\isDrawing! then YaeVM.util\endBatch batch
+    if not shapes\isDrawing! then shapes\begin!
 
-arc = (mode, x, y, radius, a1, a2) ->
+---
+-- Draws a filled or unfilled arc at position (x, y). The arc is drawn from
+-- angle1 to angle2 in radians.
+-- @string mode How to draw the arc.
+-- @number x The position of the center along x-axis.
+-- @number y The position of the center along y-axis.
+-- @number radius Radius of the arc.
+-- @number angle1 The angle at which the arc begins.
+-- @number angle2 The angle at which the arc terminates.
+-- @usage
+-- -- Drawing half a circle
+-- yae.draw = ->
+--   yae.graphics.arc( "fill", 400, 300, 100, 0, math.pi )
+--
+-- -- Drawing Pacman
+-- pacwidth = math.pi / 6 -- size of his mouth
+-- yae.draw = ->
+--   yae.graphics.setColor( 255, 255, 0 ) -- pacman needs to be yellow
+--   yae.graphics.arc( "fill", 400, 300, 100, pacwidth, (math.pi * 2) - pacwidth )
+arc = (mode, x, y, radius, angle1, angle2) ->
   check false
-
-  shapes\set Constants.shapes[mode]
-  shapes\arc x, y, radius, (math.deg a1), math.deg a2
+  shapes\set Constants.shapetypes[mode]
+  shapes\arc x, y, radius, math.deg(angle1), math.deg(angle2)
 
 circle = (mode, x, y, radius) ->
   check false
-
-  shapes\set Constants.shapes[mode]
+  shapes\set Constants.shapetypes[mode]
   shapes\circle x, y, radius
 
 clear = ->
-  Gdx.gl\glClearColor background.r, background.g, background.b
+  Gdx.gl\glClearColor background.r, background.g, background.b, background.a
   Gdx.gl\glClear GL20.GL_COLOR_BUFFER_BIT
 
-draw = (image, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
+draw = (image, x=0, y=0, r=0, sx=1, sy=1, ox=0, oy=0) ->
   check true
 
-  w = image\get_width!
-  h = image\get_height!
-
-  src_x = 0
-  src_y = 0
-
-  src_w = w
-  src_h = h
-
+  w = image\getWidth!
+  h = image\getHeight!
+  srcX = 0
+  srcY = 0
+  srcW = w
+  srcH = h
   x -= ox
   y -= oy
 
-  batch\draw image.texture, x, y, ox, oy, w, h, sx, sy, r, srx_x, srx_y, src_w, src_h, false, true
+  batch\draw image.texture, x, y, ox, oy, w, h, sx, sy, r, srcX, srcY, srcW, srcH, false, true
 
-draw_q = (image, quad, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
+drawq = (image, quad, x=0, y=0, r=0, sx=1, sy=1, ox=0, oy=0) ->
   check true
 
-  w = quad.w
-  h = quad.h
-
-  src_x = quad.x
-  src_y = quad.y
-
-  src_w = quad.sw
-  src_h = quad.sh
-
+  w = quad.width
+  h = quad.height
+  srcX = quad.x
+  srcY = quad.y
+  srcW = quad.sw
+  srcH = quad.sh
   x -= ox
   y -= oy
 
-  batch\draw image.texture, x, y, ox, oy, w, h, sx, sy, r, src_x, src_y, src_w, src_h, false, true
+  batch\draw image.texture, x, y, ox, oy, w, h, sx, sy, r, srcX, srcY, srcW, srcH, false, true
 
 ellipse = (mode, x, y, width, height) ->
   check false
-
-  shapes\set Constants.shapes[mode]
+  shapes\set Constants.shapetypes[mode]
   shapes\ellipse x, y, width, height
+
+getBackgroundColor = ->
+  return background.r * 255, background.g * 255, background.b * 255, background.a * 255
+
+getBlendMode = ->
+  return blending
+
+getColor = ->
+  return color.r * 255, color.g * 255, color.b * 255, color.a * 255
+
+getFont = ->
+  return font
 
 line = (x1, y1, x2, y2) ->
   check false
   shapes\line x1, y1, x2, y2
 
+newFont = (filename, size, filetype) ->
+  return Font filename, size, filetype
+
+newImage = (filename, format, filetype) ->
+  return Image filename, format, filetype
+
+newQuad = (x, y, width, height, sw, sh) ->
+  return Quad x, y, width, height, sw, sh
+
 origin = ->
   matrix\idt!
-  matrix_dirty = true
+  matrixDirty = true
 
 point = (x, y) ->
   check false
@@ -128,8 +145,7 @@ point = (x, y) ->
 
 polygon = (mode, ...) ->
   check false
-  shapes\set Constants.shapes[mode]
-
+  shapes\set Constants.shapetypes[mode]
   args = table.pack ...
 
   if type args[1] == "table"
@@ -138,165 +154,133 @@ polygon = (mode, ...) ->
     shapes\polygon args
 
 present = ->
-  if shapes\isDrawing!
-    Sauce3VM.util\endShapes shapes
-  if batch\isDrawing!
-    Sauce3VM.util\endBatch batch
+  if shapes\isDrawing! then YaeVM.util\endShapes shapes
+  if batch\isDrawing! then YaeVM.util\endBatch batch
 
-print = (text, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
+print = (text, x=0, y=0, r=0, sx=1, sy=1, ox=0, oy=0) ->
   check true
+  tmp = nil
 
-  local tmp
-
-  unless r == 0
+  if r != 0
     tmp = batch\getTransformMatrix!
     translate x, y
     rotate r
     translate -x, -y
-
     batch\setTransformMatrix matrix
-    matrix_dirty = false
+    matrixDirty = false
 
   font.font\getData!\setScale sx, -sy
   font.font\draw batch, text, x - ox * sx, y - oy * sy
 
-  unless r == 0
+  if r != 0
     translate x, y
     rotate -r
     translate -x, -y
-
     batch\setTransformMatrix tmp
-    matrix_dirty = false
+    matrixDirty = false
 
-print_f = (text, width = 0, align = "left", x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) ->
+printf = (text, width=0, align="left", x=0, y=0, r=0, sx=1, sy=1, ox=0, oy=0) ->
   check true
-
   tmp = nil
 
-  unless r == 0
+  if r != 0
     tmp = batch\getTransformMatrix!
     translate x, y
     rotate r
     translate -x, -y
-
     batch\setTransformMatrix matrix
-    matrix_dirty = false
+    matrixDirty = false
 
   font.font\getData!\setScale sx, -sy
   font.font\draw batch, text, x - ox * sx, y - oy * sy, width, Constants.aligns[align], true
 
-  unless r == 0
+  if r != 0
     translate x, y
     rotate -r
     translate -x, -y
-
     batch\setTransformMatrix tmp
-    matrix_dirty = false
+    matrixDirty = false
 
 rectangle = (mode, x, y, width, height) ->
   check false
+  shapes\set Constants.shapetypes[mode]
 
-  shapes\set Constants.shapes[mode]
   shapes\rect x, y, width, height
 
 reset = ->
   shader = SpriteBatch\createDefaultShader!
   batch\setShader shader
 
-  background\set 0, 0, 0, 1
+  background\set 0.4, 0.3, 0.4, 1
   color\set 1, 1, 1, 1
 
   batch\setColor color
   shapes\setColor color
   font.font\setColor color
-
   matrix\idt!
-  matrix_dirty = true
-
-translate = (x, y) ->
-  matrix\translate x, y
-  matrix_dirty = true
+  matrixDirty = true
 
 rotate = (radians) ->
-  matrix\rotate 0, 0, 1, math.deg radians
-  matrix_dirty = true
+  matrix\rotate 0, 0, 1, math.deg(radians)
+  matrixDirty = true
 
 scale = (sx, sy) ->
   matrix\scale sx, sy, 1
-  matrix_dirty = true
+  matrixDirty = true
 
-get_background_color = ->
-  background.r * 255, background.g * 255, background.b * 255
-
-get_blend_mode = ->
-  blending
-
-get_color = ->
-  color.r * 255, color.g * 255, color.b * 255, color.a * 255
-
-get_font = ->
-  font
-
-set_background_color = (r, g, b, a = 255) ->
+setBackgroundColor = (r, g, b, a=255) ->
   background\set r / 255, g / 255, b / 255, a / 255
 
-set_blend_mode = (mode) ->
+setBlendMode = (mode) ->
   blending = mode
+  blendmode = Constants.blendmodes[blending]
+  batch\setBlendFunction blendmode[1], blendmode[2]
 
-  blend_mode = Constants[blending]
-  batch\setBlendFunction blend_mode[1], blend_mode[2]
-
-set_color = (r, g, b, a = 255) ->
+setColor =  (r, g, b, a=255) ->
   color\set r / 255, g / 255, b / 255, a / 255
-
   batch\setColor color
   shapes\setColor color
   font.font\setColor color
 
-set_font = (v) ->
-  font = v
+setFont = (newFont) ->
+  font = newFont
 
-set_new_font = (path, size, f_type) ->
-  font = new_font path, size, f_type
+setNewFont = (filename, size, filetype) ->
+  font = newFont filename, size, filetype
 
-new_font = (path, size, f_type) ->
-  (Font path, size, f_type)
-
-new_image = (path, format, f_type) ->
-  (Image path, format, f_type)
-
-new_quad = (x, y, width, height, sx, sy) ->
-  (Quad x, y, width, height, sx, sy)
+translate = (tx, ty) ->
+  matrix\translate tx, ty, 0
+  matrixDirty = true
 
 {
   :arc
   :circle
   :clear
   :draw
-  :draw_q
+  :drawq
   :ellipse
-  :get_background_color
-  :get_blendMode
-  :get_color
-  :get_font
+  :getBackgroundColor
+  :getBlendMode
+  :getColor
+  :getFont
   :line
+  :newFont
+  :newImage
+  :newQuad
   :origin
   :point
   :polygon
   :present
   :print
-  :print_f
+  :printf
   :rectangle
   :reset
-  :translate
   :rotate
   :scale
-  :set_background_color
-  :set_blend_mode
-  :set_color
-  :set_font
-  :set_new_font
-  :new_font
-  :new_image
-  :new_quad
+  :setBackgroundColor
+  :setBlendMode
+  :setColor
+  :setFont
+  :setNewFont
+  :translate
 }
