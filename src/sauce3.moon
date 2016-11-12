@@ -23,8 +23,6 @@ sauce3.system      = require "sauce3/core/system"
 sauce3.timer       = require "sauce3/core/timer"
 sauce3.audio       = require "sauce3/core/audio"
 
-sauce3.easing      = require "sauce3/engine/easing"
-
 import key_codes, button_codes from require "sauce3/wrappers"
 
 sauce3._key_pressed = (key) ->
