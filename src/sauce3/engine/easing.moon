@@ -12,9 +12,8 @@ defaults = {
   elastic: "-(2^(10 * (x - 1)) * math.sin((x - 1.075) * (math.pi * 2) / 0.3))"
 }
 
-
 make_function = (s, e) ->
-  loadstring "return function(x) " .. (str\gsub "%$e", e) .. " end"
+  loadstring "return function(x) " .. (s\gsub "%$e", e) .. " end"
 
 generate_ease = (name, f) ->
   funcs[name .. "in"]  = make_function "return $e", f
