@@ -24,7 +24,7 @@ class
     Constants.format_codes[format]
 
   get_width: =>
-    @texture\get_width
+    @texture\get_width!
 
   get_height: =>
     @texture\getHeight!
